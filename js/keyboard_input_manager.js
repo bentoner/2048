@@ -58,15 +58,15 @@ KeyboardInputManager.prototype.listen = function () {
       }
     }
 
-    // R key restarts the game
-//    if (!modifiers && event.which === 82) {
-//      self.restart.call(self, event);
-//    }
-
     // R redraws the board
     if (!modifiers && event.which === 82) {
       self.emit("actuate");
     }
+
+    // F fills the board
+   if (!modifiers && event.which === 70) {
+     self.emit("fill");
+}
 
   });
 

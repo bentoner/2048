@@ -12,6 +12,7 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
   this.inputManager.on("restart", this.restart.bind(this));
   this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
   this.inputManager.on("actuate", this.actuate.bind(this));
+  this.inputManager.on("fill", this.fillWithXs.bind(this));
   this.blockValue = 4097;
 
 
@@ -42,7 +43,7 @@ GameManager.prototype.isGameTerminated = function () {
 
 // Set up the game
 GameManager.prototype.setup = function () {
-  var previousState = null; //this.storageManager.getGameState();
+  var previousState = this.storageManager.getGameState();
 
   // Reload the game from a previous game if present
   if (previousState) {
@@ -52,6 +53,9 @@ GameManager.prototype.setup = function () {
     this.over        = previousState.over;
     this.won         = previousState.won;
     this.keepPlaying = previousState.keepPlaying;
+
+    this.setupHtmlGrid();
+
   } else {
     this.grid        = new Grid(this.size);
     this.score       = 0;
@@ -60,7 +64,7 @@ GameManager.prototype.setup = function () {
     this.keepPlaying = false;
 
     this.setupHtmlGrid();
-    this.fillWithXs();
+    // this.fillWithXs();
 
     // Add the initial tiles
     this.addStartTiles();
@@ -72,6 +76,8 @@ GameManager.prototype.setup = function () {
 };
 
 GameManager.prototype.setupHtmlGrid = function () {
+  // delete prev grid
+  $('.grid-container').empty();
   for (var i = 0; i < this.size; i++) {
     var $table = $('<div class="grid-row"></div>');
     for (var j = 0; j < this.size; j++) {
