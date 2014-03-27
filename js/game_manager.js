@@ -7,8 +7,11 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
   this.startTiles     = 2;
 
   this.inputManager.on("move", this.move.bind(this));
+  this.inputManager.on("editTile", this.editTile.bind(this));
   this.inputManager.on("restart", this.restart.bind(this));
   this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
+  this.blockValue = 4097;
+
 
   this.setup();
 }
@@ -55,9 +58,11 @@ GameManager.prototype.setup = function () {
     this.keepPlaying = false;
 
     this.setupHtmlGrid();
+    this.fillWithXs();
 
     // Add the initial tiles
     this.addStartTiles();
+
   }
 
   // Update the actuator
@@ -75,9 +80,8 @@ GameManager.prototype.setupHtmlGrid = function () {
 };
 
 GameManager.prototype.fillWithXs = function () {
-  var i = 4097;
   while (this.grid.cellsAvailable()) {
-    var tile = new Tile(this.grid.randomAvailableCell(), i++);
+    var tile = new Tile(this.grid.randomAvailableCell(), this.blockValue++);
     this.grid.insertTile(tile);
   }
 
@@ -88,6 +92,26 @@ GameManager.prototype.fillWithXs = function () {
   this.actuate();
 };
 
+GameManager.prototype.editTile = function (position) {
+  var $tile = $('.tile-position-' + position[0] + '-' + position[1])
+  var value = $tile.select(' .tile-inner').text();
+  //this.prepareTiles()
+  if (value !== '') {
+    var cell = { x: position[0]-1, y: position[1]-1};
+    var tile = this.grid.cellContent(cell);
+    console.log(tile)
+    if (value === 'b') {
+      tile.value = this.blockValue++;
+      this.actuate();
+    } else if (value === 'x') {
+      this.grid.removeTile(tile);
+      this.actuate();
+    } else {
+      tile.value = parseInt(value);
+    }
+  }
+}
+
 // Set up the initial tiles to start the game with
 GameManager.prototype.addStartTiles = function () {
   for (var i = 0; i < this.startTiles; i++) {
@@ -97,6 +121,7 @@ GameManager.prototype.addStartTiles = function () {
 
 // Adds a tile in a random position
 GameManager.prototype.addRandomTile = function () {
+  return;
   if (this.grid.cellsAvailable()) {
     var value = Math.random() < 0.9 ? 2 : 4;
     var tile = new Tile(this.grid.randomAvailableCell(), value);
@@ -266,7 +291,7 @@ GameManager.prototype.findFarthestPosition = function (cell, vector) {
 };
 
 GameManager.prototype.movesAvailable = function () {
-  return this.grid.cellsAvailable() || this.tileMatchesAvailable();
+  return true || this.grid.cellsAvailable() || this.tileMatchesAvailable();
 };
 
 // Check for available matches between tiles (more expensive check)

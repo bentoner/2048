@@ -63,6 +63,7 @@ HTMLActuator.prototype.addTile = function (tile) {
 
   inner.classList.add("tile-inner");
   inner.textContent = tile.value;
+  inner.setAttribute('contenteditable', 'true');
 
   if (tile.value > 4096 && tile.value < 8000) {
     inner.textContent = null;

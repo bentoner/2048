@@ -77,6 +77,13 @@ KeyboardInputManager.prototype.listen = function () {
   var touchStartClientX, touchStartClientY;
   var gameContainer = document.getElementsByClassName("game-container")[0];
 
+  $(gameContainer).on('input', function (e) {
+    if (e.target.classList.contains("tile-inner")) {
+      var position = $(e.target.parentElement).attr("class").split('tile-position-')[1].split(' ')[0].split('-')
+      self.emit("editTile", position);
+    }
+  });
+
   gameContainer.addEventListener(this.eventTouchstart, function (event) {
     if ((!window.navigator.msPointerEnabled && event.touches.length > 1) ||
         event.targetTouches > 1) {
