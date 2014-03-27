@@ -64,9 +64,16 @@ KeyboardInputManager.prototype.listen = function () {
     }
 
     // F fills the board
-   if (!modifiers && event.which === 70) {
-     self.emit("fill");
-}
+    if (!modifiers && event.which === 70) {
+      self.emit("fill");
+    }
+
+    // G saves the game
+    if (!modifiers && event.which === 71) {
+      self.emit("saveGame");
+    }
+
+
 
   });
 

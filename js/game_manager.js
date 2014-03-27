@@ -13,6 +13,7 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
   this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
   this.inputManager.on("actuate", this.actuate.bind(this));
   this.inputManager.on("fill", this.fillWithXs.bind(this));
+  this.inputManager.on("saveGame", this.saveGame.bind(this));
   this.blockValue = 4097;
 
 
@@ -103,7 +104,6 @@ GameManager.prototype.fillWithXs = function () {
 GameManager.prototype.editTile = function (position) {
   var $tile = $('.tile-position-' + position[0] + '-' + position[1])
   var value = $tile.select(' .tile-inner').text();
-  //this.prepareTiles()
   if (value !== '') {
     var cell = { x: position[0]-1, y: position[1]-1};
     var tile = this.grid.cellContent(cell);
@@ -128,6 +128,9 @@ GameManager.prototype.createTile = function (cell) {
   this.actuate()
 }
 
+GameManager.prototype.saveGame = function () {
+  this.storageManager.setGameState(this.serialize());
+}
 
 // Set up the initial tiles to start the game with
 GameManager.prototype.addStartTiles = function () {
@@ -157,7 +160,7 @@ GameManager.prototype.actuate = function () {
   if (this.over) {
     this.storageManager.clearGameState();
   } else {
-    this.storageManager.setGameState(this.serialize());
+    //this.storageManager.setGameState(this.serialize());
   }
 
   this.actuator.actuate(this.grid, {
