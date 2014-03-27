@@ -11,7 +11,7 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
   this.inputManager.on("createTile", this.createTile.bind(this));
   this.inputManager.on("restart", this.restart.bind(this));
   this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
-  this.inputManager.on("actuate", this.actuate.bind(this));
+  this.inputManager.on("redraw", this.redraw.bind(this));
   this.inputManager.on("fill", this.fillWithXs.bind(this));
   this.inputManager.on("saveGame", this.saveGame.bind(this));
   this.blockValue = 4097;
@@ -116,22 +116,26 @@ GameManager.prototype.editTile = function (position) {
       this.actuate();
     } else {
       tile.value = parseInt(value);
-      setTimeout(function () {gm.actuate();}, 1000);
     }
   }
 
-}
+};
 
 GameManager.prototype.createTile = function (cell) {
   var tile = new Tile(cell, this.blockValue++);
   this.prepareTiles();
   this.grid.insertTile(tile);
   this.actuate()
-}
+};
+
+GameManager.prototype.redraw = function () {
+  this.prepareTiles();
+  this.actuate();
+};
 
 GameManager.prototype.saveGame = function () {
   this.storageManager.setGameState(this.serialize());
-}
+};
 
 // Set up the initial tiles to start the game with
 GameManager.prototype.addStartTiles = function () {

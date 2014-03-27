@@ -60,7 +60,7 @@ KeyboardInputManager.prototype.listen = function () {
 
     // R redraws the board
     if (!modifiers && event.which === 82) {
-      self.emit("actuate");
+      self.emit("redraw");
     }
 
     // F fills the board
