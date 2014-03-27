@@ -43,10 +43,6 @@ KeyboardInputManager.prototype.listen = function () {
     76: 1, // Vim right
     74: 2, // Vim down
     72: 3, // Vim left
-    87: 0, // W
-    68: 1, // D
-    83: 2, // S
-    65: 3  // A
   };
 
   // Respond to direction keys
@@ -63,9 +59,15 @@ KeyboardInputManager.prototype.listen = function () {
     }
 
     // R key restarts the game
+//    if (!modifiers && event.which === 82) {
+//      self.restart.call(self, event);
+//    }
+
+    // R redraws the board
     if (!modifiers && event.which === 82) {
-      self.restart.call(self, event);
+      self.emit("actuate");
     }
+
   });
 
   // Respond to button presses
@@ -83,6 +85,15 @@ KeyboardInputManager.prototype.listen = function () {
       self.emit("editTile", position);
     }
   });
+
+  // create tile in blank spot
+  $(gameContainer).click(function (e) {
+    if (e.target.classList.contains("grid-cell")) {
+      var cell = {x: $(e.target).index(), y: $(e.target.parentElement).index()};
+      self.emit("createTile", cell);
+    }
+  });
+
 
   gameContainer.addEventListener(this.eventTouchstart, function (event) {
     if ((!window.navigator.msPointerEnabled && event.touches.length > 1) ||
