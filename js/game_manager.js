@@ -105,6 +105,7 @@ GameManager.prototype.editTile = function (position) {
   var $tile = $('.tile-position-' + position[0] + '-' + position[1])
   var value = $tile.select(' .tile-inner').text();
   if (value !== '') {
+    this.prepareTiles();
     var cell = { x: position[0]-1, y: position[1]-1};
     var tile = this.grid.cellContent(cell);
     if (value === 'x') {
@@ -123,7 +124,7 @@ GameManager.prototype.editTile = function (position) {
 
 GameManager.prototype.createTile = function (cell) {
   var tile = new Tile(cell, this.blockValue++);
-  console.log(tile);
+  this.prepareTiles();
   this.grid.insertTile(tile);
   this.actuate()
 }
