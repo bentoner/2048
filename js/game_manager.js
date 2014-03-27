@@ -74,6 +74,20 @@ GameManager.prototype.setupHtmlGrid = function () {
   }
 };
 
+GameManager.prototype.fillWithXs = function () {
+  var i = 4097;
+  while (this.grid.cellsAvailable()) {
+    var tile = new Tile(this.grid.randomAvailableCell(), i++);
+    this.grid.insertTile(tile);
+  }
+
+  if (!this.movesAvailable()) {
+    this.over = true; // Game over!
+  }
+
+  this.actuate();
+};
+
 // Set up the initial tiles to start the game with
 GameManager.prototype.addStartTiles = function () {
   for (var i = 0; i < this.startTiles; i++) {
