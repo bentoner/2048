@@ -107,17 +107,18 @@ GameManager.prototype.editTile = function (position) {
   if (value !== '') {
     var cell = { x: position[0]-1, y: position[1]-1};
     var tile = this.grid.cellContent(cell);
-    console.log(tile)
-    if (value === 'b') {
-      tile.value = this.blockValue++;
-      this.actuate();
-    } else if (value === 'x') {
+    if (value === 'x') {
       this.grid.removeTile(tile);
+      this.actuate()
+    } else if (isNaN(parseInt(value))) {
+      tile.value = this.blockValue++;
       this.actuate();
     } else {
       tile.value = parseInt(value);
+      setTimeout(function () {gm.actuate();}, 1000);
     }
   }
+
 }
 
 GameManager.prototype.createTile = function (cell) {
