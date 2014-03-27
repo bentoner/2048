@@ -37,7 +37,7 @@ GameManager.prototype.isGameTerminated = function () {
 
 // Set up the game
 GameManager.prototype.setup = function () {
-  var previousState = this.storageManager.getGameState();
+  var previousState = null; //this.storageManager.getGameState();
 
   // Reload the game from a previous game if present
   if (previousState) {
@@ -54,12 +54,24 @@ GameManager.prototype.setup = function () {
     this.won         = false;
     this.keepPlaying = false;
 
+    this.setupHtmlGrid();
+
     // Add the initial tiles
     this.addStartTiles();
   }
 
   // Update the actuator
   this.actuate();
+};
+
+GameManager.prototype.setupHtmlGrid = function () {
+  for (var i = 0; i < this.size; i++) {
+    var $table = $('<div class="grid-row"></div>');
+    for (var j = 0; j < this.size; j++) {
+      $table.append('<div class="grid-cell"></div>');
+    }
+    $('.grid-container').append($table);
+  }
 };
 
 // Set up the initial tiles to start the game with
