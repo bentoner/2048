@@ -14,6 +14,7 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
   this.inputManager.on("redraw", this.redraw.bind(this));
   this.inputManager.on("fill", this.fillWithXs.bind(this));
   this.inputManager.on("saveGame", this.saveGame.bind(this));
+  this.inputManager.on("loadGame", this.loadGame.bind(this));
   this.blockValue = 4097;
 
 
@@ -134,7 +135,27 @@ GameManager.prototype.redraw = function () {
 };
 
 GameManager.prototype.saveGame = function () {
-  this.storageManager.setGameState(this.serialize());
+  var name = prompt("save game name: ");
+  this.storageManager.setGameState(name, this.serialize());
+};
+
+GameManager.prototype.loadGame = function () {
+  // TODO should select from list
+  var name = prompt("enter save name");
+  var savedGame = this.storageManager.getGameState(name);
+
+  // Reload the game from a previous game if present
+  if (savedGame) {
+    this.grid        = new Grid(savedGame.grid.size,
+                                savedGame.grid.cells); // Reload grid
+    this.score       = savedGame.score;
+    this.over        = savedGame.over;
+    this.won         = savedGame.won;
+    this.keepPlaying = savedGame.keepPlaying;
+
+    this.setupHtmlGrid();
+    this.actuate();
+  }
 };
 
 // Set up the initial tiles to start the game with

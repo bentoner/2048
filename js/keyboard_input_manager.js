@@ -39,10 +39,6 @@ KeyboardInputManager.prototype.listen = function () {
     39: 1, // Right
     40: 2, // Down
     37: 3, // Left
-    75: 0, // Vim up
-    76: 1, // Vim right
-    74: 2, // Vim down
-    72: 3, // Vim left
   };
 
   // Respond to direction keys
@@ -73,6 +69,10 @@ KeyboardInputManager.prototype.listen = function () {
       self.emit("saveGame");
     }
 
+    // L loads a game
+    if (!modifiers && event.which === 76) {
+      self.emit("loadGame");
+    }
 
 
   });
